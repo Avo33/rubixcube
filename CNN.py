@@ -64,63 +64,22 @@ target_val=[target_dict[class_name[i]] for i in range(len(class_name))]
 print(target_val)
 
 
-# CSV_COLUMN_NAMES = ['1','2','3','4','5','6','7',
-#               '8','9','10','11','12','13',
-#               '14','15','16','17','18','19',
-#               '20','21','22','23','24','25',
-#               '26','27','28','29','30','31',
-#               '32','33','34','35','36','37',
-#               '38','39','40','41','42','43',
-#               '44','45','46','47','48','49',
-#               '50','51','52','53','54', 'heuristic']
-# HEURISTIC = ['1','2','3','4','5','6','7',
-#               '8','9','10','11','12','13',
-#               '14','15','16','17','18','19',
-#               '20']
-#
-#
 # """load data"""
+
 img_data=np.array(img_data)
-img_data=np.reshape(img_data,(100,162))
-dftrain = pd.DataFrame(img_data)
-# dfeval = pd.read_csv('evaluation.csv')
-# print(dftrain.head())
+print(img_data.shape)
+# img_data=np.reshape(img_data,(100,162))
 y_train = np.array(target_val)
-# y_eval = dfeval.pop('heuristic')
-print(type(img_data))
-print(type(y_train))
+
 
 test_img_data=np.array(test_img_data)
-test_img_data=np.reshape(test_img_data,(100,162))
-dftrain = pd.DataFrame(test_img_data)
-# dfeval = pd.read_csv('evaluation.csv')
-# print(dftrain.head())
-y_train = np.array(target_val)
+# test_img_data=np.reshape(test_img_data,(100,162))
 y_eval = y_train
 
 
-
-#
-#
-# """convert categorical data into numeric data"""
-# NUMERIC_COLUMNS = ['1','2','3','4','5','6','7',
-#               '8','9','10','11','12','13',
-#               '14','15','16','17','18','19',
-#               '20','21','22','23','24','25',
-#               '26','27','28','29','30','31',
-#               '32','33','34','35','36','37',
-#               '38','39','40','41','42','43',
-#               '44','45','46','47','48','49',
-#               '50','51','52','53','54']
-# feature_columns = []
-# for feature_name in NUMERIC_COLUMNS:
-#     feature_columns.append(tf.feature_column.numeric_column(feature_name, dtype=tf.float32))
-# print(feature_columns)
-#
-#
 """Building CNN Base"""
 model = models.Sequential()
-model.add(layers.Conv2D(162, (3, 1), activation='relu', input_shape=(162, 1, 3)))
+model.add(layers.Conv2D(54, (3, 1), activation='relu', input_shape=(54, 1, 3)))
 model.add(layers.MaxPooling2D((2, 1)))
 model.add(layers.Conv2D(108, (3, 1), activation='relu'))
 model.add(layers.MaxPooling2D((2, 1)))
@@ -128,7 +87,7 @@ model.add(layers.Conv2D(108, (3, 1 ), activation='relu'))
 
 """"Adding Dense Layers"""
 model.add(layers.Flatten())
-model.add(layers.Dense(162, activation='relu'))
+model.add(layers.Dense(54, activation='relu'))
 model.add(layers.Dense(20))
 
 
@@ -138,10 +97,9 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
+history = model.fit(img_data,y_train,epochs=4)
 
-history = model.fit(img_model = tf.expand_dims(img_data, axis=-1),y_model=tf.expand_dims(y_train, axis=-1),epochs=4)
+test_loss, test_acc = model.evaluate(img_data, y_train, verbose=2)
 
-# test_loss, test_acc = model.evaluate(img_data, y_train, verbose=2)
-#
-# print(test_acc)
+print(test_acc)
 
